@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+const fs = require("fs");
+const path = require("path");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,10 +17,32 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "extension.welcomeUser",
     () => {
-      // The code you place here will be executed every time your command is executed
+      const htmlContent = `<!DOCTYPE html>
+	  <html lang="en">
+		<head>
+		  <meta charset="UTF-8" />
+		  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		  <title>Aesop 1.0</title>
+		</head>
+		<body></body>
+	  </html>
+	  `;
+      const folderPath = vscode.workspace.workspaceFolders[0].uri
+        .toString()
+        .split(":")[1];
 
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Welcome To Aesop!");
+      console.log(folderPath);
+
+      fs.writeFile(path.join(folderPath, "index.html"), htmlContent, err => {
+        if (err) {
+          console.error(err);
+          return vscode.window.showErrorMessage(
+            "Failed to create HTML boilerplate"
+          );
+        }
+        vscode.window.showInformationMessage("Created boilerplate HTML file.");
+      });
     }
   );
 
