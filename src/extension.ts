@@ -17,6 +17,10 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "extension.welcomeUser",
     () => {
+      const folderPath = vscode.workspace.workspaceFolders[0].uri
+        .toString()
+		.split(":")[1];
+		
       const htmlContent = `<!DOCTYPE html>
 	  <html lang="en">
 		<head>
@@ -28,11 +32,6 @@ export function activate(context: vscode.ExtensionContext) {
 		<body></body>
 	  </html>
 	  `;
-      const folderPath = vscode.workspace.workspaceFolders[0].uri
-        .toString()
-        .split(":")[1];
-
-      console.log(folderPath);
 
       fs.writeFile(path.join(folderPath, "index.html"), htmlContent, err => {
         if (err) {
